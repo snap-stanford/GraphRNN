@@ -92,7 +92,7 @@ def gumbel_sigmoid(logits, temperature):
     noise = Variable(noise_logistic).cuda()
 
     x = (logits + noise) / temperature
-    x = F.sigmoid(x)
+    x = torch.sigmoid(x)
     return x
 
 # x = Variable(torch.randn(100)).cuda()
@@ -111,7 +111,7 @@ def sample_sigmoid(y, sample, thresh=0.5, sample_time=2):
     '''
 
     # do sigmoid first
-    y = F.sigmoid(y)
+    y = torch.sigmoid(y)
     # do sampling
     if sample:
         if sample_time>1:
@@ -148,7 +148,7 @@ def sample_sigmoid_supervised(y_pred, y, current, y_len, sample_time=2):
     '''
 
     # do sigmoid first
-    y_pred = F.sigmoid(y_pred)
+    y_pred = torch.sigmoid(y_pred)
     # do sampling
     y_result = Variable(torch.rand(y_pred.size(0), y_pred.size(1), y_pred.size(2))).cuda()
     # loop over all batches
@@ -186,7 +186,7 @@ def sample_sigmoid_supervised_simple(y_pred, y, current, y_len, sample_time=2):
     '''
 
     # do sigmoid first
-    y_pred = F.sigmoid(y_pred)
+    y_pred = torch.sigmoid(y_pred)
     # do sampling
     y_result = Variable(torch.rand(y_pred.size(0), y_pred.size(1), y_pred.size(2))).cuda()
     # loop over all batches
@@ -239,12 +239,12 @@ class LSTM_plain(nn.Module):
 
         for name, param in self.rnn.named_parameters():
             if 'bias' in name:
-                nn.init.constant(param, 0.25)
+                nn.init.constant_(param, 0.25)
             elif 'weight' in name:
-                nn.init.xavier_uniform(param,gain=nn.init.calculate_gain('sigmoid'))
+                nn.init.xavier_uniform_(param,gain=nn.init.calculate_gain('sigmoid'))
         for m in self.modules():
             if isinstance(m, nn.Linear):
-                m.weight.data = init.xavier_uniform(m.weight.data, gain=nn.init.calculate_gain('relu'))
+                m.weight.data = init.xavier_uniform_(m.weight.data, gain=nn.init.calculate_gain('relu'))
 
     def init_hidden(self, batch_size):
         return (Variable(torch.zeros(self.num_layers, batch_size, self.hidden_size)).cuda(),
@@ -294,12 +294,12 @@ class GRU_plain(nn.Module):
 
         for name, param in self.rnn.named_parameters():
             if 'bias' in name:
-                nn.init.constant(param, 0.25)
+                nn.init.constant_(param, 0.25)
             elif 'weight' in name:
-                nn.init.xavier_uniform(param,gain=nn.init.calculate_gain('sigmoid'))
+                nn.init.xavier_uniform_(param,gain=nn.init.calculate_gain('sigmoid'))
         for m in self.modules():
             if isinstance(m, nn.Linear):
-                m.weight.data = init.xavier_uniform(m.weight.data, gain=nn.init.calculate_gain('relu'))
+                m.weight.data = init.xavier_uniform_(m.weight.data, gain=nn.init.calculate_gain('relu'))
 
     def init_hidden(self, batch_size):
         return Variable(torch.zeros(self.num_layers, batch_size, self.hidden_size)).cuda()
@@ -687,7 +687,7 @@ class Graph_RNN_structure(nn.Module):
         # 3 then update self.hidden_all list
         # i.e., model will use ground truth to update new node
         # x_pred_sample = gumbel_sigmoid(x_pred, temperature=temperature)
-        x_pred_sample = sample_tensor(F.sigmoid(x_pred),sample=True)
+        x_pred_sample = sample_tensor(torch.sigmoid(x_pred),sample=True)
         thresh = 0.5
         x_thresh = Variable(torch.ones(x_pred_sample.size(0), x_pred_sample.size(1), x_pred_sample.size(2)) * thresh).cuda()
         x_pred_sample_long = torch.gt(x_pred_sample, x_thresh).long()
