@@ -4,13 +4,15 @@ This repository is the official PyTorch implementation of GraphRNN, a graph gene
 [Jiaxuan You](https://cs.stanford.edu/~jiaxuan/)\*, [Rex Ying](https://cs.stanford.edu/people/rexy/)\*, [Xiang Ren](http://www-bcf.usc.edu/~xiangren/), [William L. Hamilton](https://stanford.edu/~wleif/), [Jure Leskovec](https://cs.stanford.edu/people/jure/index.html), [GraphRNN: Generating Realistic Graphs with Deep Auto-regressive Model](https://arxiv.org/abs/1802.08773) (ICML 2018)
 
 ## Installation
-Install PyTorch following the instuctions on the [official website](https://pytorch.org/). The code has been tested over PyTorch 0.2.0 and 0.4.0 versions.
+Install PyTorch following the instuctions on the [official website](https://pytorch.org/). The code has been tested over Pytorch 1.0 
 ```bash
-conda install pytorch torchvision cuda90 -c pytorch
+conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
 ```
 Then install the other dependencies.
 ```bash
 pip install -r requirements.txt
+pip install Scipy
+pip install python-louvain
 ```
 
 ## Test run
