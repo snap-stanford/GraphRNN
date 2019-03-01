@@ -108,6 +108,8 @@ venv.bak/
 .vscode
 *.csv
 
-**/graphs
-**/tensorboard
+graphs/
+model_save/
+tensorboard/
+
 
